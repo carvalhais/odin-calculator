@@ -1,0 +1,17 @@
+* {
+    border: 1px solid red;
+}
+
+.front-bezel {
+    width: min(80%, 768px);
+    margin: auto;
+}
+
+.op-keys {
+    display: flex;
+}
+
+.key-column {
+    display: flex;
+    flex-direction: column;
+}
