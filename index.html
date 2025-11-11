@@ -13,11 +13,19 @@
             Pocket calculator
         </div>
         <div class="lcd">
-            000000000000000000000
+            <div class="lcd-ghost">
+                8.8.8.8.8.8.8.8.8.8
+                <div class="lcd-active">
+                    
+                </div>
+            </div>
         </div>
         <div class="keyboard">
             <div class="fn-keys">
-                <button>AC</button>
+                <button style="visibility: hidden;"></button>
+                <button style="visibility: hidden;"></button>
+                <button id="button-ac">AC</button>
+                <button id="button-bs">&#x232B;</button>
             </div>
             <div class="op-keys">
                 <div class="key-column numeric">
@@ -39,8 +47,8 @@
                     <button id="button-eq">=</button>
                 </div>
                 <div class="key-column operations">
-                    <button id="button-div">/</button>
-                    <button id="button-mul">x</button>
+                    <button id="button-div">&divide;</button>
+                    <button id="button-mul">&times;</button>
                     <button id="button-sub">-</button>
                     <button id="button-add">+</button>
                 </div>

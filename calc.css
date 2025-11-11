@@ -1,17 +1,101 @@
 * {
-    border: 1px solid red;
+    box-sizing: content-box;
+}
+
+@font-face {
+    font-family: "DSEG";
+    src: url("./assets/DSEG7Classic-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
 }
 
 .front-bezel {
-    width: min(80%, 768px);
+    width: 512px;
     margin: auto;
+    padding: 15px;
+    background-color: rgb(59, 63, 72);
+    border-radius: 15px;
+}
+
+.branding {
+    margin: 20px 30px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: lightslategray;
+}
+
+.lcd {
+    margin: 60px 30px;
+    padding: 15px;
+    font-family: DSEG;
+    font-size: 52px;
+    background-color: rgb(164, 184, 82);
+    border-radius: 5px;
+}
+
+.lcd-ghost {
+    position: relative;
+    color: rgb(144, 162, 74);
+}
+
+.lcd-active {
+    position: absolute;
+    top: 0px;
+    right: -2px;
+    color: rgb(32, 36, 14);
+    
+}
+
+.keyboard {
+    margin: 40px 30px;
+}
+
+.fn-keys {
+    display: flex;
+    margin: 40px auto;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.fn-keys button {
+    flex-basis: 25%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    aspect-ratio: 1.75;
+    border-radius: 10px;
+    color: rgb(17, 18, 20);
+    background-color: rgb(113, 161, 198);
 }
 
 .op-keys {
     display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
 }
 
 .key-column {
     display: flex;
     flex-direction: column;
+    flex-basis: 25%;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.key-column button {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    aspect-ratio: 1.15;
+    border-radius: 10px;
+    color: rgb(17, 18, 20);
+    background-color: rgb(198, 200, 213);   
+}
+
+.operations button {
+    background-color: rgb(255, 159, 55);
+}
+
+#button-eq {
+    background-color: rgb(113, 161, 198);
 }
