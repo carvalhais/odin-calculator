@@ -42,7 +42,7 @@
     top: 0px;
     right: -2px;
     color: rgb(32, 36, 14);
-    
+    /* z-index: 1; */
 }
 
 .keyboard {
