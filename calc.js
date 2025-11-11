@@ -21,6 +21,11 @@ const lcdDisplay = {
         if(d === "." && this._buffer.includes(d)) return;
         this._buffer.push(d);
         this._updateDisplay();
+    },
+    delDigit: function() {
+        if(this._buffer.length > 1) this._buffer.pop()
+        else this._buffer[0] = "0";
+        this._updateDisplay();
     }
 };
 
@@ -39,7 +44,8 @@ function buttonHandler(e) {
     else if(button === "7") lcdDisplay.addDigit("7")
     else if(button === "8") lcdDisplay.addDigit("8")
     else if(button === "9") lcdDisplay.addDigit("9")
-    else if(button === "dec") lcdDisplay.addDigit(".");
+    else if(button === "dec") lcdDisplay.addDigit(".")
+    else if(button === "bs") lcdDisplay.delDigit();
 }
 
 const keyboard = document.querySelector(".keyboard");
