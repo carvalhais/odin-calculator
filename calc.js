@@ -13,7 +13,7 @@ const STATE_RESULT = iota++;
 const stateMachine ={
     display: document.querySelector(".lcd-active"),
     maxWidth: 10,
-    minValue: 0.000000001,
+    minValue: -999999999,
     maxValue: 9999999999,
     buffer: [],
     operand1: null,
