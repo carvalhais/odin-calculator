@@ -110,14 +110,14 @@ const stateMachine ={
     bufferAdd: function(digit) {
         // the font glyph for the dot has zero width, we need to account for
         // this when computing the onscreen width of the display text
-        const dotInBuffer = this.buffer.includes(".") ? 1 : 0;
-        const width = this.buffer.length - dotInBuffer;
+        const decInBuffer = this.buffer.includes(".") ? 1 : 0;
+        const width = this.buffer.length - decInBuffer;
         if(width >= this.maxWidth) {
             return;
         }
         // do nothing if there already is a decimal separator in the buffer and
         // the user is trying to input another one
-        if(digit === "dec" && dotInBuffer) {
+        if(digit === "dec" && decInBuffer) {
             return;
         }
         digit = digit === "dec" ? "." : digit;
