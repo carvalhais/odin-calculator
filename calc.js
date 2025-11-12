@@ -77,6 +77,7 @@ const stateMachine ={
                 }
                 break;
 
+            // this is the only valid state for the user to press the "=" key
             case STATE_OPERAND2:
                 if(numSymbols.includes(input)) {
                     this.bufferAdd(input);
@@ -92,6 +93,15 @@ const stateMachine ={
                     this.bufferResult();
                     this.displayUpdate();
                     this.infix = input;
+                    this.currentState = STATE_RESULT;
+                }
+                if(input === "eq") {
+                    this.operand2 = this.bufferParse();
+                    if(!this.compute()) {
+                        return;
+                    }
+                    this.bufferResult();
+                    this.displayUpdate();
                     this.currentState = STATE_RESULT;
                 }
                 break;
