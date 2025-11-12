@@ -142,7 +142,31 @@ const stateMachine ={
         return +this.buffer.join("");
     },
 
-    bufferResult: null,
+    bufferResult: function() {
+        let intNum = Math.trunc(this.lastResult);
+        let intStr = intNum.toString()
+        // have the width of the decimal part be be as wide as possible while
+        // still making sure the integer part will fully fit on the LCD
+        let decWidth = this.maxWidth - intStr.length;
+        if(decWidth === 0) {
+            // inNum might not be the nearest integer so round it
+            intNum = Math.round(this.lastResult);
+            this.buffer = intNum.toString().split("");
+        }
+        let decNum = this.result - intNum;
+        // string representation of decimal part rounded to decWidth places
+        let decStr = decNum.toFixed(decWidth).split(".").at(-1);
+        let numSpell = `${intStr}.${decStr}`.split("");
+        // consume any stray character to the right of the decimal separator 
+        // that shouldn't be display
+        while(numSpell.includes(".")) {
+            if(numSpell.at(-1) === "0" || numSpell.at(-1) === ".") {
+                numSpell.pop();
+            }
+            break;
+        }
+        this.buffer = numSpell;
+    },
 
     compute: function() {
         let result = null;
