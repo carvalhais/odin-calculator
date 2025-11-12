@@ -1,54 +1,136 @@
-const lcdDisplay = {
-    MAX_DIGITS: 10,
-    _buffer: ["0",],    // show a solid 0 after loading
-    _uiElement: document.querySelector(".lcd-active"),
-    _updateDisplay: function() {
-        // handle initial "0" display
-        if(this._buffer[0] === "0" && this._buffer.length > 1) {
-            if(this._buffer[1] !== ".") this._buffer.shift();
+const numSymbols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
+const opSymbols = ["div", "mul", "sub", "add"];
+const specialFn = ["ac", "bs"];
+
+let iota = 0;
+const STATE_BEGIN = iota++;
+const STATE_WAIT1 = iota++
+const STATE_OPERAND1 = iota++;
+const STATE_WAIT2 = iota++;
+const STATE_OPERAND2 = iota++;
+const STATE_RESULT = iota++;
+
+const stateMachine ={
+    display: document.querySelector(".lcd-active"),
+    maxWidth: 10,
+    buffer: [],
+    operand1: null,
+    operand2: null,
+    infix: null,
+    lastResult: null,
+    currentState: STATE_BEGIN,
+    cycleState: function(input) {
+        switch(this.currentState) {
+
+            case STATE_BEGIN:
+                this.bufferAdd("0");
+                this.displayUpdate();
+                this.currentState = STATE_WAIT1;
+                break;
+
+            case STATE_WAIT1:
+                if(numSymbols.includes(input)) {
+                    if(input === "0") {
+                        break;
+                    }
+                    if(input !== ".") {
+                        this.bufferClear();
+                    }
+                    this.bufferAdd(input);
+                    this.displayUpdate();
+                    this.currentState = STATE_OPERAND1;
+                }
+                if(opSymbols.includes(input)) {
+                    this.operand1 = this.bufferParse();
+                    this.infix = input;
+                    this.currentState = STATE_WAIT2;
+                }
+                break;
+
+            case STATE_OPERAND1:
+                if(numSymbols.includes(input)) {
+                    this.bufferAdd(input);
+                    this.displayUpdate();
+                }
+                if(opSymbols.includes(input)) {
+                    this.operand1 = this.bufferParse();
+                    this.infix = input;
+                    this.currentState = STATE_WAIT2;
+                }
+                break;
+
+            case STATE_WAIT2:
+                if(numSymbols.includes(input)) {
+                    this.bufferClear();
+                    if(input === ".") {
+                        this.bufferAdd("0");
+                    }
+                    this.bufferAdd(input);
+                    this.displayUpdate();
+                    this.currentState = STATE_OPERAND2;
+                }
+                break;
+
+            case STATE_OPERAND2:
+                if(numSymbols.includes(input)) {
+                    this.bufferAdd(input);
+                    this.displayUpdate();
+                }
+                if(opSymbols.includes(input)) {
+                    this.operand2 = this.bufferParse();
+                    this.compute();
+                    this.bufferResult();
+                    this.displayUpdate();
+                    this.currentState = STATE_RESULT;
+                }
+                break;
+
+            case STATE_RESULT:
+                if(numSymbols.includes(input)) {
+                    this.bufferClear();
+                    if(input === ".") {
+                        this.bufferAdd("0");
+                    }
+                    this.bufferAdd(input);
+                    this.displayUpdate();
+                    this.currentState = STATE_OPERAND1;
+                }
+                if(opSymbols.includes(input)) {
+                    this.operand1 = this.bufferParse();
+                    this.infix = input;
+                    this.currentState = STATE_WAIT2;
+                }
+                break;
+
+            default:
+                break;
         }
-        this._uiElement.textContent = this._buffer.join("");
     },
-    addDigit: function(d) {
-        const digits = "0123456789.";
-        // dot has 0 width, so we only care about digits
-        // https://www.keshikan.net/fonts-e.html
-        const count = this._buffer.length + (
-            this._buffer.includes(".") ? -1 : 0
-        );
-        if (count >= this.MAX_DIGITS) return;
-        // allow for a single decimal separator
-        if(d === "." && this._buffer.includes(d)) return;
-        this._buffer.push(d);
-        this._updateDisplay();
-    },
-    delDigit: function() {
-        if(this._buffer.length > 1) this._buffer.pop()
-        else this._buffer[0] = "0";
-        this._updateDisplay();
-    }
-};
 
-function buttonHandler(e) {
-    const id = e.target.id;
-    if(!id.startsWith("button-")) return;
+    bufferAdd: null,
 
-    const button = id.split("-").at(-1);
-    if(button === "0") lcdDisplay.addDigit("0")
-    else if(button === "1") lcdDisplay.addDigit("1")
-    else if(button === "2") lcdDisplay.addDigit("2")
-    else if(button === "3") lcdDisplay.addDigit("3")
-    else if(button === "4") lcdDisplay.addDigit("4")
-    else if(button === "5") lcdDisplay.addDigit("5")
-    else if(button === "6") lcdDisplay.addDigit("6")
-    else if(button === "7") lcdDisplay.addDigit("7")
-    else if(button === "8") lcdDisplay.addDigit("8")
-    else if(button === "9") lcdDisplay.addDigit("9")
-    else if(button === "dec") lcdDisplay.addDigit(".")
-    else if(button === "bs") lcdDisplay.delDigit();
+    bufferClear: null,
+
+    bufferParse: null,
+
+    bufferResult: null,
+
+    displayUpdate: null,
+
+    stateClear: null,
 }
 
-const keyboard = document.querySelector(".keyboard");
-keyboard.addEventListener("click", buttonHandler);
+function clickHandler(e) {
+    const id = e.target.id;
+    if(!id.startsWith("button-")) {
+        return
+    };
+
+    const symbol = id.split("-").at(-1);
+    stateMachine.cycleState(symbol);
+}
+
+const calcKeyboard = document.querySelector(".keyboard");
+calcKeyboard.addEventListener("click", clickHandler);
 
 window.onload = lcdDisplay._updateDisplay();
