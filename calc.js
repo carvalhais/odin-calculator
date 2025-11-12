@@ -91,10 +91,16 @@ const stateMachine ={
                     }
                     this.bufferResult();
                     this.displayUpdate();
+                    this.infix = input;
                     this.currentState = STATE_RESULT;
                 }
                 break;
 
+            // probably it would be possible to meet the requirements without
+            // this state, but having another state allows for chainning 
+            // multiple computations without loss of precision (the result 
+            // shown on LCD screen is only limited by the display width, but
+            // not by the precision of chained coputations)
             case STATE_RESULT:
                 if(numSymbols.includes(input)) {
                     this.bufferClear();
@@ -103,10 +109,11 @@ const stateMachine ={
                     }
                     this.bufferAdd(input);
                     this.displayUpdate();
-                    this.currentState = STATE_OPERAND1;
+                    this.operand1 = this.lastResult;
+                    this.currentState = STATE_OPERAND2;
                 }
                 if(opSymbols.includes(input)) {
-                    this.operand1 = this.bufferParse();
+                    this.operand1 = this.lastResult;
                     this.infix = input;
                     this.currentState = STATE_WAIT2;
                 }
