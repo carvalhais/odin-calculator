@@ -97,7 +97,7 @@ const stateMachine ={
                 break;
 
             // probably it would be possible to meet the requirements without
-            // this state, but having another state allows for chainning 
+            // this state, but having another state allows for chaining 
             // multiple computations without loss of precision (the result 
             // shown on LCD screen is only limited by the display width, but
             // not by the precision of chained coputations)
