@@ -131,7 +131,14 @@ const stateMachine ={
 
     displayUpdate: null,
 
-    stateClear: null,
+    stateClear: function() {
+        this.buffer = [];
+        this.operand1 = null;
+        this.operand2 = null;
+        this.infix = null;
+        this.lastResult = null;
+        this.currentState = STATE_BEGIN;
+    },
 }
 
 function clickHandler(e) {
