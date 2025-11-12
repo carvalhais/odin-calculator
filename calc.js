@@ -137,6 +137,23 @@ const stateMachine ={
 
     bufferResult: null,
 
+    compute: function() {
+        switch(this.infix) {
+            case "div":
+                this.lastResult = this.operand1 / this.operand2;
+                break;
+            case "mul":
+                this.lastResult = this.operand1 * this.operand2;
+                break;
+            case "sub":
+                this.lastResult = this.operand1 - this.operand2;
+                break;
+            case "add":
+                this.lastResult = this.operand1 + this.operand2;
+                break;
+        }
+    },
+
     displayUpdate: function() {
         this.display.textContent = this.buffer.join("");
     },
