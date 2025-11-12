@@ -129,7 +129,9 @@ const stateMachine ={
 
     bufferResult: null,
 
-    displayUpdate: null,
+    displayUpdate: function() {
+        this.display.textContent = this.buffer.join("");
+    },
 
     stateClear: function() {
         this.buffer = [];
