@@ -128,7 +128,9 @@ const stateMachine ={
         this.buffer = [];
     },
 
-    bufferParse: null,
+    bufferParse: function() {
+        return +this.buffer.join("");
+    },
 
     bufferResult: null,
 
