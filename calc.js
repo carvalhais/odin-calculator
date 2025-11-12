@@ -69,6 +69,9 @@ const stateMachine ={
                     this.displayUpdate();
                     this.currentState = STATE_OPERAND2;
                 }
+                if(opSymbols.includes(input)) {
+                    this.infix = input;
+                }
                 break;
 
             case STATE_OPERAND2:
