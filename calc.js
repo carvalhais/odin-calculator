@@ -31,6 +31,7 @@ const stateMachine ={
             case STATE_WAIT1:
                 if(numSymbols.includes(input)) {
                     if(input === "0") {
+                        this.displayUpdate();
                         break;
                     }
                     if(input !== "dec") {
@@ -156,6 +157,12 @@ const stateMachine ={
 
     displayUpdate: function() {
         this.display.textContent = this.buffer.join("");
+    },
+
+    error: function(msg) {
+        this.stateClear();
+        this.cycleState();
+        this.display.textContent = msg;
     },
 
     stateClear: function() {
