@@ -107,7 +107,21 @@ const stateMachine ={
         }
     },
 
-    bufferAdd: null,
+    bufferAdd: function(digit) {
+        // the font glyph for the dot has zero width, we need to account for
+        // this when computing the onscreen width of the display text
+        const dotInBuffer = this.buffer.includes(".") ? 1 : 0;
+        const width = this.buffer.length - dotInBuffer;
+        if(width >= this.maxWidth) {
+            return;
+        }
+        // do nothing if there already is a decimal separator in the buffer and
+        // the user is trying to input another one
+        if(digit === "." && dotInBuffer) {
+            return;
+        }
+        this.buffer.push(digit);
+    },
 
     bufferClear: null,
 
