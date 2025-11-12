@@ -8,7 +8,8 @@ const STATE_WAIT1 = iota++
 const STATE_OPERAND1 = iota++;
 const STATE_WAIT2 = iota++;
 const STATE_OPERAND2 = iota++;
-const STATE_RESULT = iota++;
+const STATE_RESULT_EQUAL = iota++;
+const STATE_RESULT_CHAIN = iota++;
 
 const stateMachine ={
     display: document.querySelector(".lcd-active"),
@@ -93,7 +94,7 @@ const stateMachine ={
                     this.bufferResult();
                     this.displayUpdate();
                     this.infix = input;
-                    this.currentState = STATE_RESULT;
+                    this.currentState = STATE_RESULT_CHAIN;
                 }
                 if(input === "eq") {
                     this.operand2 = this.bufferParse();
@@ -102,16 +103,31 @@ const stateMachine ={
                     }
                     this.bufferResult();
                     this.displayUpdate();
-                    this.currentState = STATE_RESULT;
+                    this.currentState = STATE_RESULT_EQUAL;
                 }
                 break;
+
+            // intentionally falls through at the end of the current case 
+            // since STATE_RESULT_CHAIN handles the case for operation 
+            // inputs correctly
+            case STATE_RESULT_EQUAL:
+                if(numSymbols.includes(input)) {
+                    this.stateClear();
+                    if(input === "dec") {
+                        this.bufferAdd("0");
+                    }
+                    this.bufferAdd(input);
+                    this.displayUpdate();
+                    this.currentState = STATE_OPERAND1;
+                    break;
+                }
 
             // probably it would be possible to meet the requirements without
             // this state, but having another state allows for chaining 
             // multiple computations without loss of precision (the result 
             // shown on LCD screen is only limited by the display width, but
             // not by the precision of chained coputations)
-            case STATE_RESULT:
+            case STATE_RESULT_CHAIN:
                 if(numSymbols.includes(input)) {
                     this.bufferClear();
                     if(input === "dec") {
