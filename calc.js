@@ -123,7 +123,9 @@ const stateMachine ={
         this.buffer.push(digit);
     },
 
-    bufferClear: null,
+    bufferClear: function() {
+        this.buffer = [];
+    },
 
     bufferParse: null,
 
