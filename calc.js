@@ -154,4 +154,4 @@ function clickHandler(e) {
 const calcKeyboard = document.querySelector(".keyboard");
 calcKeyboard.addEventListener("click", clickHandler);
 
-window.onload = lcdDisplay._updateDisplay();
+window.onload = stateMachine.cycleState();
