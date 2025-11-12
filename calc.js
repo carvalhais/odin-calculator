@@ -153,7 +153,7 @@ const stateMachine ={
             intNum = Math.round(this.lastResult);
             this.buffer = intNum.toString().split("");
         }
-        let decNum = this.result - intNum;
+        let decNum = this.lastResult - intNum;
         // string representation of decimal part rounded to decWidth places
         let decStr = decNum.toFixed(decWidth).split(".").at(-1);
         let numSpell = `${intStr}.${decStr}`.split("");
@@ -162,6 +162,7 @@ const stateMachine ={
         while(numSpell.includes(".")) {
             if(numSpell.at(-1) === "0" || numSpell.at(-1) === ".") {
                 numSpell.pop();
+                continue;
             }
             break;
         }
