@@ -155,6 +155,21 @@ const stateMachine ={
         this.cycleState();
     },
 
+    backSpace: function() {
+        switch(this.currentState) {
+            case STATE_OPERAND1:
+            case STATE_OPERAND2:
+                if(this.buffer.length > 1) {
+                    this.buffer.pop();
+                }
+                else {
+                    this.buffer[0] = "0";
+                }
+                break;
+        }
+        this.displayUpdate();
+    },
+
     bufferAdd: function(digit) {
         // the font glyph for the dot has zero width, we need to account for
         // this when computing the onscreen width of the display text
@@ -269,6 +284,9 @@ function clickHandler(e) {
         switch(symbol) {
             case "ac":
                 stateMachine.allClear();
+                break;
+            case "bs":
+                stateMachine.backSpace();
                 break;
         }
     }
