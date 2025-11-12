@@ -150,6 +150,11 @@ const stateMachine ={
         }
     },
 
+    allClear: function() {
+        this.stateClear();
+        this.cycleState();
+    },
+
     bufferAdd: function(digit) {
         // the font glyph for the dot has zero width, we need to account for
         // this when computing the onscreen width of the display text
@@ -239,8 +244,7 @@ const stateMachine ={
     },
 
     error: function(msg) {
-        this.stateClear();
-        this.cycleState();
+        this.allClear();
         this.display.textContent = msg;
     },
 
@@ -261,7 +265,16 @@ function clickHandler(e) {
     };
 
     const symbol = id.split("-").at(-1);
-    stateMachine.cycleState(symbol);
+    if(specialFn.includes(symbol)) {
+        switch(symbol) {
+            case "ac":
+                stateMachine.allClear();
+                break;
+        }
+    }
+    else {
+        stateMachine.cycleState(symbol);
+    }
 }
 
 const calcKeyboard = document.querySelector(".keyboard");
