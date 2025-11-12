@@ -1,4 +1,4 @@
-const numSymbols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
+const numSymbols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "dec"];
 const opSymbols = ["div", "mul", "sub", "add"];
 const specialFn = ["ac", "bs"];
 
@@ -33,7 +33,7 @@ const stateMachine ={
                     if(input === "0") {
                         break;
                     }
-                    if(input !== ".") {
+                    if(input !== "dec") {
                         this.bufferClear();
                     }
                     this.bufferAdd(input);
@@ -62,7 +62,7 @@ const stateMachine ={
             case STATE_WAIT2:
                 if(numSymbols.includes(input)) {
                     this.bufferClear();
-                    if(input === ".") {
+                    if(input === "dec") {
                         this.bufferAdd("0");
                     }
                     this.bufferAdd(input);
@@ -88,7 +88,7 @@ const stateMachine ={
             case STATE_RESULT:
                 if(numSymbols.includes(input)) {
                     this.bufferClear();
-                    if(input === ".") {
+                    if(input === "dec") {
                         this.bufferAdd("0");
                     }
                     this.bufferAdd(input);
@@ -117,9 +117,10 @@ const stateMachine ={
         }
         // do nothing if there already is a decimal separator in the buffer and
         // the user is trying to input another one
-        if(digit === "." && dotInBuffer) {
+        if(digit === "dec" && dotInBuffer) {
             return;
         }
+        digit = digit === "dec" ? "." : digit;
         this.buffer.push(digit);
     },
 
