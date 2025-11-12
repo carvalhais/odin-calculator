@@ -273,13 +273,7 @@ const stateMachine ={
     },
 }
 
-function clickHandler(e) {
-    const id = e.target.id;
-    if(!id.startsWith("button-")) {
-        return
-    };
-
-    const symbol = id.split("-").at(-1);
+function symbolDispatcher(symbol) {
     if(specialFn.includes(symbol)) {
         switch(symbol) {
             case "ac":
@@ -295,7 +289,68 @@ function clickHandler(e) {
     }
 }
 
-const calcKeyboard = document.querySelector(".keyboard");
-calcKeyboard.addEventListener("click", clickHandler);
+// handles user click events on the UI
+function clickHandler(e) {
+    const id = e.target.id;
+    if(!id.startsWith("button-")) {
+        return
+    };
+    const symbol = id.split("-").at(-1);
+    symbolDispatcher(symbol);
+}
+
+// handles user key presses on the UI
+function keydownHandler(e) {
+    symbol = null;
+    switch(e.key) {
+        case "Escape":
+            symbol = "ac";
+            break;
+        case "Backspace":
+            symbol = "bs";
+            break;
+        case "/":
+            symbol = "div";
+            break;
+        case "*":
+            symbol = "mul";
+            break;
+        case "-":
+            symbol = "sub";
+            break;
+        case "+":
+            symbol = "add";
+            break;
+        case "Enter":
+            symbol = "eq";
+            break;
+        case "=":
+            symbol = "eq";
+            break;
+        case ".":
+            symbol = "dec";
+            break;
+        case ",":
+            symbol = "dec";
+            break;
+        case "0":
+        case "1":
+        case "2":
+        case "3":
+        case "4":
+        case "5":
+        case "6":
+        case "7":
+        case "8":
+        case "9":
+            symbol = e.key;
+            break;
+    }
+    symbolDispatcher(symbol);
+}
+
+const body = document.querySelector("body");
+body.addEventListener("click", clickHandler);
+body.addEventListener("keydown", keydownHandler)
 
 window.onload = stateMachine.cycleState();
