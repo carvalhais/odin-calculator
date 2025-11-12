@@ -1,3 +1,31 @@
+// Implements a basic calculator with a state machine based approach.
+// 
+// The calculator uses an infix notation, and have the following states:
+//
+//      STATE_BEGIN:
+//          Initial state.
+//
+//      STATE_WAIT1,
+//      STATE_WAIT2:
+//          In these states, the state machine is waiting for the user to user
+//          to start inputing numbers for the respective operands (1 and 2).
+//
+//      STATE_OPERAND1,
+//      STATE_OPERAND2:
+//          The user has started to input operands, pressing an operation key
+//          waits for the next operand (if inputing operand 1) or immediately 
+//          computes the result (if inputing operand 2).
+//
+//      STATE_RESULT_EQUAL,
+//      STATE_RESULT_CHAIN:
+//          The machine gets to these states after a computation. There needs
+//          to be two different states to handle pculiarities in the behaviour
+//          of the calculator after the users finishes the current computation 
+//          by pressing either the "=" key or another operation key.
+//
+//          Full precision is kept for chained computations made with the value
+//          stored from the previous result.
+//
 const numSymbols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "dec"];
 const opSymbols = ["div", "mul", "sub", "add"];
 const specialFn = ["ac", "bs"];
