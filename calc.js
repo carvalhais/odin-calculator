@@ -13,6 +13,8 @@ const STATE_RESULT = iota++;
 const stateMachine ={
     display: document.querySelector(".lcd-active"),
     maxWidth: 10,
+    minValue: 0.000000001,
+    maxValue: 9999999999,
     buffer: [],
     operand1: null,
     operand2: null,
@@ -82,7 +84,11 @@ const stateMachine ={
                 }
                 if(opSymbols.includes(input)) {
                     this.operand2 = this.bufferParse();
-                    this.compute();
+                    // compute() will handle state machine if there were any
+                    // errors
+                    if(!this.compute()) {
+                        return;
+                    }
                     this.bufferResult();
                     this.displayUpdate();
                     this.currentState = STATE_RESULT;
@@ -139,20 +145,35 @@ const stateMachine ={
     bufferResult: null,
 
     compute: function() {
+        let result = null;
         switch(this.infix) {
             case "div":
-                this.lastResult = this.operand1 / this.operand2;
+                if(this.operand2 === 0) {
+                    this.error("DIV.BY.0");
+                    return false;
+                }
+                result = this.operand1 / this.operand2;
                 break;
             case "mul":
-                this.lastResult = this.operand1 * this.operand2;
+                result = this.operand1 * this.operand2;
                 break;
             case "sub":
-                this.lastResult = this.operand1 - this.operand2;
+                result = this.operand1 - this.operand2;
                 break;
             case "add":
-                this.lastResult = this.operand1 + this.operand2;
+                result = this.operand1 + this.operand2;
                 break;
         }
+        if(result < this.minValue) {
+            this.error("UNDERFLOW");
+            return false;
+        }
+        if(result > this.maxValue) {
+            this.error("OVERFLOW")
+            return false;
+        }
+        this.lastResult = result;
+        return true;
     },
 
     displayUpdate: function() {
